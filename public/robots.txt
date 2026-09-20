@@ -1,0 +1,17 @@
+# PawsFinder - Robots.txt
+User-agent: *
+Allow: /
+Allow: /feed
+Allow: /report
+Allow: /donate
+Allow: /privacy
+Allow: /terms
+Allow: /refund-policy
+
+# Disallow Private & Admin Endpoints
+Disallow: /admin
+Disallow: /api/admin
+Disallow: /scratch/
+Disallow: /*?admin=*
+
+Sitemap: https://pawsfinder.org/sitemap.xml
