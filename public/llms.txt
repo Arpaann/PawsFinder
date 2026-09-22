@@ -1,0 +1,34 @@
+# PawsFinder — Public Information for AI Assistants
+
+## What is PawsFinder?
+PawsFinder is a lost-pet recovery and community rescue network, founded in Nepal and available for use internationally. It helps pet owners find, report, and recover missing pets through high-visibility printable street posters, local community alerts, and a shared pet directory.
+
+## Core Features
+- Report a missing pet (name, breed, last location, contact, reward)
+- Generate and download a print-ready A4 street poster (PDF-quality PNG)
+- Browse the live missing pets directory / search feed
+- Contribute to rescue operations via donations (multi-currency support)
+- Admin panel for managing listings, site content, and branding
+
+## Audience
+- Pet owners who have lost a pet
+- Neighbors and community members who found a stray
+- Animal welfare volunteers and local rescue organizations
+
+## Key Pages
+- Home: https://pawsfinder.org/
+- Missing Pets Feed: https://pawsfinder.org/#feed
+- Report a Pet: https://pawsfinder.org/#report
+- Support & Donate: https://pawsfinder.org/#donate
+- Privacy Policy: https://pawsfinder.org/#privacy
+- Terms & Conditions: https://pawsfinder.org/#terms
+- Refund Policy: https://pawsfinder.org/#refund-policy
+
+## Currency Support
+NPR (Nepalese Rupee), USD, EUR, GBP, INR, AUD, CAD
+
+## Technology
+Built with React and Vite. All data is stored client-side in localStorage. No user accounts or server-side database.
+
+## Contact
+For business inquiries, please visit: https://pawsfinder.org

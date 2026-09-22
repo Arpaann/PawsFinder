@@ -1,16 +1,59 @@
-# React + Vite
+# PawsFinder
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+**PawsFinder** is a lost-pet recovery and community rescue platform built with React, Vite, and Tailwind CSS.
 
-Currently, two official plugins are available:
+It helps pet owners report missing pets, generate print-ready street posters, and coordinate community alerts — serving Nepal and users worldwide.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- Report a missing pet and auto-generate a printable A4 street poster
+- Browse the live missing pets community feed
+- Multi-currency donation support (NPR, USD, EUR, GBP, INR, AUD, CAD)
+- Admin panel for managing listings, site content, and branding
+- Full SEO — Open Graph, Twitter Card, structured data, sitemap, robots.txt
+- Works as a Progressive Web App (PWA) — installable on mobile
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Getting Started
 
-## Expanding the Oxlint configuration
+```bash
+npm install
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+## Build for Production
+
+```bash
+npm run build
+npm run preview
+```
+
+## Environment Variables
+
+Copy `.env.example` to `.env` and update the domain:
+
+```
+VITE_SITE_URL=https://yourproductiondomain.com
+VITE_APP_NAME=PawsFinder
+```
+
+## Project Structure
+
+```
+src/
+  components/   # Reusable UI components (Navbar, Footer, Modals, etc.)
+  context/      # Global state (PawsContext — pets, config, currency, admin auth)
+  data/         # Initial pet listings and default assets
+  pages/        # Page-level components (Home, Feed, Report, Donate, Legal)
+public/
+  favicon.svg   # PawsFinder paw print icon
+  sitemap.xml
+  robots.txt
+  llms.txt
+  site.webmanifest
+```
+
+## License
+
+All rights reserved. PawsFinder is a commercial product. Do not redistribute without permission.

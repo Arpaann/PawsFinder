@@ -1,9 +1,11 @@
 import React from 'react';
 import { Shield, Lock, Eye, FileText, Mail, Server, Trash2 } from 'lucide-react';
+import { Breadcrumbs } from '../components/Breadcrumbs';
 
 export const PrivacyPage = ({ setActiveTab }) => {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8 text-slate-300">
+      <Breadcrumbs activeTab="privacy" setActiveTab={setActiveTab} />
       
       {/* Page Header */}
       <div className="border-b border-slate-800 pb-6 space-y-3">

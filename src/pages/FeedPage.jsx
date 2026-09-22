@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { usePaws } from '../context/PawsContext';
 import { Search, Filter, MapPin, Calendar, ArrowRight, Award, PlusCircle, AlertCircle } from 'lucide-react';
+import { Breadcrumbs } from '../components/Breadcrumbs';
 
 export const FeedPage = ({ setActiveTab, onSelectPet }) => {
   const { pets } = usePaws();
@@ -27,6 +28,7 @@ export const FeedPage = ({ setActiveTab, onSelectPet }) => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8 font-sans">
+      <Breadcrumbs activeTab="feed" setActiveTab={setActiveTab} />
       
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-6">

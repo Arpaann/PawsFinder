@@ -1,17 +1,29 @@
-# PawsFinder - Robots.txt
+# PawsFinder — Robots.txt
+# https://pawsfinder.org/robots.txt
+
 User-agent: *
 Allow: /
-Allow: /feed
-Allow: /report
-Allow: /donate
-Allow: /privacy
-Allow: /terms
-Allow: /refund-policy
+Allow: /#feed
+Allow: /#report
+Allow: /#donate
+Allow: /#privacy
+Allow: /#terms
+Allow: /#refund-policy
 
-# Disallow Private & Admin Endpoints
+# Block internal/admin paths
 Disallow: /admin
 Disallow: /api/admin
-Disallow: /scratch/
 Disallow: /*?admin=*
 
+# AI training crawlers — opt out
+User-agent: GPTBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+# Sitemap
 Sitemap: https://pawsfinder.org/sitemap.xml

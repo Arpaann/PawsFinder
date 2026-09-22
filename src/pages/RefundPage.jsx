@@ -1,9 +1,11 @@
 import React from 'react';
 import { Heart, RefreshCw, HelpCircle, Mail, CheckCircle2 } from 'lucide-react';
+import { Breadcrumbs } from '../components/Breadcrumbs';
 
 export const RefundPage = ({ setActiveTab }) => {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8 text-slate-300">
+      <Breadcrumbs activeTab="refund-policy" setActiveTab={setActiveTab} />
       
       {/* Header */}
       <div className="border-b border-slate-800 pb-6 space-y-3">

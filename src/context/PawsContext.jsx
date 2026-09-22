@@ -31,6 +31,17 @@ const DEFAULT_CONFIG = {
   donationQrUrl: DEFAULT_QR_URL
 };
 
+// Centralized social link configuration
+const SOCIAL_LINKS = {
+  instagram: "https://www.instagram.com/pawsfinder0_0/",
+  tiktok: "https://www.tiktok.com/@pawsfinder00",
+  youtube: "https://www.youtube.com/@Pawsfinder0_0",
+  whatsapp: "https://api.whatsapp.com/send?phone=9779768903634",
+  linktree: "https://linktr.ee/pawsfinder0_0?utm_source=linktree_profile_share&ltsid=bd8af591-369a-445b-a0d9-03bcbc398c61",
+  // LinkedIn will be set from existing config if present; placeholder for now
+  linkedin: null
+};
+
 export const PawsProvider = ({ children }) => {
   // 1. Pet Listings State
   const [pets, setPets] = useState(() => {

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { usePaws } from '../context/PawsContext';
 import { PlusCircle, Award, CheckCircle2, Sparkles, AlertCircle, Globe, AlertTriangle } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { Breadcrumbs } from '../components/Breadcrumbs';
 
 export const ReportPage = ({ setActiveTab, onSelectPet }) => {
   const { addPet, siteConfig, currency, currencies } = usePaws();
@@ -120,6 +121,7 @@ export const ReportPage = ({ setActiveTab, onSelectPet }) => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+      <Breadcrumbs activeTab="report" setActiveTab={setActiveTab} />
       
       {/* Header */}
       <div className="border-b border-slate-800 pb-6 text-center max-w-3xl mx-auto space-y-2">
