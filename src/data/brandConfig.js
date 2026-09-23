@@ -49,8 +49,21 @@ export const SOCIAL = {
   },
 };
 
-/** Milestone stats — only use verified real figures */
+/**
+ * Calculates dynamic days active starting from September 30th.
+ * Automatically increases by +1 every 24 hours.
+ */
+export function calculateDaysActive(startDateStr = '2025-09-30') {
+  const start = new Date(startDateStr);
+  const now = new Date();
+  const diffInMs = Math.max(0, now - start);
+  return Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+}
+
+/** Milestone stats — dynamically updated every day */
 export const MILESTONES = {
-  daysActive: 365,
+  get daysActive() {
+    return calculateDaysActive('2025-09-30');
+  },
   dogsReunited: 149,
 };

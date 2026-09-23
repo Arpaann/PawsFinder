@@ -123,7 +123,10 @@ function LostPoster({ pet, siteConfig, rewardText }) {
             <p style={{ color: '#991b1b', fontSize: '9px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '1px' }}>Last Seen</p>
             <p style={{ color: '#0f172a', fontSize: '13px', fontWeight: '800', marginTop: '2px' }}>{pet.lastSeenLocation}</p>
             <p style={{ color: '#64748b', fontSize: '11px', fontWeight: '600', marginTop: '2px' }}>
-              {new Date(pet.lostDate).toLocaleDateString(undefined, { dateStyle: 'medium' })}
+              {new Date(pet.lostDate).toLocaleDateString(undefined, { dateStyle: 'medium' })} {(() => {
+                const diff = Math.floor((new Date() - new Date(pet.lostDate)) / (1000 * 60 * 60 * 24));
+                return diff <= 0 ? '(Today)' : diff === 1 ? '(1 day ago)' : `(${diff} days ago)`;
+              })()}
             </p>
           </div>
 
