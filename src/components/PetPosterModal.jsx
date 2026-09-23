@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { usePaws } from '../context/PawsContext';
 import { X, Printer, Download, Copy, Check, Share2, Phone, MapPin, Calendar, Tag, Info, MessageCircle } from 'lucide-react';
-import html2canvas from 'html2canvas-pro';
+import '../styles/poster.css';
 
 export const PetPosterModal = ({ pet, onClose }) => {
   const { siteConfig, currency } = usePaws();
