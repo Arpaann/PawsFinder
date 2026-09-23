@@ -23,29 +23,13 @@ export const SUPPORTED_CURRENCIES = [
 
 const DEFAULT_CONFIG = {
   appTitle: "PawsFinder",
-  subtitle: "Nepal & International Lost Pet Recovery Network",
-  alertTickerText: "Community Notice: Active lost pet searches in progress. Report sightings or missing pets immediately via hotline or WhatsApp.",
-  emergencyPhone: "+977 (984) 123-4567",
-  whatsappNumber: "+9779841234567",
+  tagline: "For All The Dogs",
+  subtitle: "Community Lost Dog Recovery — Nepal & Worldwide",
+  alertTickerText: "Active lost dog searches in your area. If you've seen a missing dog, call or WhatsApp us immediately.",
+  emergencyPhone: "9768903634",
+  whatsappNumber: "9768903634",
   logoUrl: DEFAULT_LOGO_URL,
   donationQrUrl: DEFAULT_QR_URL
-};
-
-// Centralized social link configuration
-const SOCIAL_LINKS = {
-  instagram: "https://www.instagram.com/pawsfinder0_0/",
-  tiktok: "https://www.tiktok.com/@pawsfinder00",
-  youtube: "https://www.youtube.com/@Pawsfinder0_0",
-  whatsapp: "https://api.whatsapp.com/send?phone=9779768903634",
-  linktree: "https://linktr.ee/pawsfinder0_0?utm_source=linktree_profile_share&ltsid=bd8af591-369a-445b-a0d9-03bcbc398c61",
-  // LinkedIn will be set from existing config if present; placeholder for now
-  linkedin: null
-};
-
-// Poster specific QR codes
-const POSTER_QR = {
-  instagram: "/qrcodes/instagram.png",
-  linktree: "/qrcodes/linktree.png"
 };
 
 export const PawsProvider = ({ children }) => {
@@ -93,7 +77,7 @@ export const PawsProvider = ({ children }) => {
     try {
       const saved = sessionStorage.getItem(STORAGE_KEYS.ADMIN);
       return saved === 'true';
-    } catch (e) {
+    } catch (_err) {
       return false;
     }
   });

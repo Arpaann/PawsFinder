@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Search, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Home, Search, AlertCircle } from 'lucide-react';
 
 export const NotFoundPage = ({ setActiveTab }) => {
   return (

@@ -1,23 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { ShieldCheck, Check, X, Info } from 'lucide-react';
+import React, { useState } from 'react';
+import { ShieldCheck, X } from 'lucide-react';
 
 const COOKIE_STORAGE_KEY = 'pawsfinder_cookie_consent';
 
 export const CookieConsentBanner = () => {
-  const [showBanner, setShowBanner] = useState(false);
+  const [showBanner, setShowBanner] = useState(() => {
+    try {
+      return !localStorage.getItem(COOKIE_STORAGE_KEY);
+    } catch (_err) {
+      return false;
+    }
+  });
   const [showPreferences, setShowPreferences] = useState(false);
   const [analyticsConsent, setAnalyticsConsent] = useState(true);
-
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(COOKIE_STORAGE_KEY);
-      if (!saved) {
-        setShowBanner(true);
-      }
-    } catch (e) {
-      // Fallback
-    }
-  }, []);
 
   const handleAcceptAll = () => {
     try {
@@ -26,7 +21,9 @@ export const CookieConsentBanner = () => {
         analytics: true,
         timestamp: new Date().toISOString()
       }));
-    } catch (e) {}
+    } catch (_err) {
+      // Ignore storage error
+    }
     setShowBanner(false);
   };
 
@@ -37,7 +34,9 @@ export const CookieConsentBanner = () => {
         analytics: false,
         timestamp: new Date().toISOString()
       }));
-    } catch (e) {}
+    } catch (_err) {
+      // Ignore storage error
+    }
     setShowBanner(false);
   };
 
@@ -48,7 +47,9 @@ export const CookieConsentBanner = () => {
         analytics: analyticsConsent,
         timestamp: new Date().toISOString()
       }));
-    } catch (e) {}
+    } catch (_err) {
+      // Ignore storage error
+    }
     setShowBanner(false);
   };
 
@@ -74,7 +75,7 @@ export const CookieConsentBanner = () => {
       </div>
 
       <p className="text-slate-400 leading-relaxed text-[11px]">
-        PawsFinder uses local storage to save your pet listings, currency preferences ({`NPR/USD`}), and essential site functionality. We respect your data privacy.
+        PawsFinder uses local storage to save your pet listings, currency preferences (NPR/USD), and essential site functionality. We respect your data privacy.
       </p>
 
       {showPreferences && (
@@ -111,7 +112,13 @@ export const CookieConsentBanner = () => {
         </button>
 
         <button
-          onClick={() => setShowPreferences(!showPreferences)}
+          onClick={() => {
+            if (showPreferences) {
+              handleSavePreferences();
+            } else {
+              setShowPreferences(true);
+            }
+          }}
           className="text-indigo-400 hover:underline text-[11px] font-semibold px-1"
         >
           {showPreferences ? 'Save Options' : 'Preferences'}
