@@ -30,30 +30,42 @@ CREATE TABLE IF NOT EXISTS public.pets (
 -- 2. Enable Row Level Security (RLS)
 ALTER TABLE public.pets ENABLE ROW LEVEL SECURITY;
 
--- 3. Create Public Access Policies
--- Allow anyone to read approved pets (or all pets if viewing details)
+-- 3. Drop existing policies if they already exist (to avoid duplicate policy error)
+DROP POLICY IF EXISTS "Allow public read access to pets" ON public.pets;
+DROP POLICY IF EXISTS "Allow public insert to pets" ON public.pets;
+DROP POLICY IF EXISTS "Allow update access to pets" ON public.pets;
+DROP POLICY IF EXISTS "Allow delete access to pets" ON public.pets;
+
+-- 4. Create Public Access Policies
 CREATE POLICY "Allow public read access to pets"
   ON public.pets
   FOR SELECT
   USING (true);
 
--- Allow anyone to insert new missing pet reports
 CREATE POLICY "Allow public insert to pets"
   ON public.pets
   FOR INSERT
   WITH CHECK (true);
 
--- Allow updates (e.g. status changes / approvals)
 CREATE POLICY "Allow update access to pets"
   ON public.pets
   FOR UPDATE
   USING (true);
 
--- Allow delete access (for admin management)
 CREATE POLICY "Allow delete access to pets"
   ON public.pets
   FOR DELETE
   USING (true);
 
--- 4. Enable Supabase Realtime for the `pets` table
-ALTER PUBLICATION supabase_realtime ADD TABLE public.pets;
+-- 5. Enable Supabase Realtime for the `pets` table
+DO $$ 
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_publication_tables 
+    WHERE pubname = 'supabase_realtime' 
+    AND schemaname = 'public' 
+    AND tablename = 'pets'
+  ) THEN
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.pets;
+  END IF;
+END $$;
