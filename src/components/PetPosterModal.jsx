@@ -347,6 +347,39 @@ Thank you so much — every share helps!
     setTimeout(() => setCopied(false), 2500);
   };
 
+  const handleNativeShare = async () => {
+    if (navigator.share) {
+      try {
+        if (posterRef.current) {
+          const canvas = await html2canvas(posterRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false });
+          const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+          if (blob) {
+            const file = new File([blob], `PAWSFINDER_${posterType.toUpperCase()}_${pet.name}.png`, { type: 'image/png' });
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+              await navigator.share({
+                title: `PLEASE HELP FIND ${pet.name.toUpperCase()}!`,
+                text: shareableText,
+                files: [file]
+              });
+              return;
+            }
+          }
+        }
+        await navigator.share({
+          title: `PLEASE HELP FIND ${pet.name.toUpperCase()}!`,
+          text: shareableText,
+          url: window.location.href
+        });
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          handleCopyText();
+        }
+      }
+    } else {
+      handleCopyText();
+    }
+  };
+
   const handlePrint = () => window.print();
 
   const handleDownload = async () => {
@@ -380,26 +413,40 @@ Thank you so much — every share helps!
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto"
+      className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-2 sm:p-6 overflow-y-auto"
       role="dialog"
       aria-modal="true"
       aria-label={`Poster for ${pet.name}`}
     >
-      <div className="bg-slate-900 border border-slate-800/60 rounded-2xl max-w-3xl w-full overflow-hidden shadow-2xl my-auto max-h-[92vh] flex flex-col">
+      <div className="bg-slate-900 border border-slate-800/60 rounded-2xl sm:rounded-3xl max-w-3xl w-full overflow-hidden shadow-2xl my-auto max-h-[94vh] flex flex-col">
+
+        {/* Mobile Pull Bar */}
+        <div className="sm:hidden flex justify-center pt-2 pb-1 bg-slate-950">
+          <div className="w-12 h-1 bg-slate-700 rounded-full" />
+        </div>
 
         {/* Controls bar */}
-        <div className="bg-slate-950 px-5 py-3.5 border-b border-slate-800/60 flex items-center justify-between shrink-0 no-print">
-          <div className="flex items-center gap-3">
-            <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${statusClass}`}>
+        <div className="bg-slate-950 px-4 sm:px-5 py-3 border-b border-slate-800/60 flex items-center justify-between shrink-0 no-print flex-wrap gap-2">
+          <div className="flex items-center gap-2">
+            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${statusClass}`}>
               {statusLabel}
             </span>
             <span className="text-xs font-medium text-slate-500">#{pet.id}</span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <button
+              onClick={handleNativeShare}
+              className="flex items-center gap-1 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-2.5 py-1.5 rounded-xl transition-colors active:scale-95"
+              aria-label="Share poster"
+            >
+              <Share2 className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>Share</span>
+            </button>
+
             <button
               onClick={handlePrint}
-              className="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-3 py-2 rounded-xl border border-slate-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+              className="hidden sm:flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-3 py-1.5 rounded-xl border border-slate-700 transition-colors"
             >
               <Printer className="w-3.5 h-3.5 text-indigo-400" aria-hidden="true" />
               Print
@@ -408,19 +455,19 @@ Thank you so much — every share helps!
             <button
               onClick={handleDownload}
               disabled={isDownloading}
-              className="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-xs font-bold px-3 py-2 rounded-xl transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+              className="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-xs font-bold px-2.5 py-1.5 sm:px-3 sm:py-1.5 rounded-xl transition-colors active:scale-95"
               aria-label="Download poster as PNG"
             >
               <Download className="w-3.5 h-3.5" aria-hidden="true" />
-              {isDownloading ? 'Preparing…' : 'Save PNG'}
+              {isDownloading ? 'Preparing…' : 'PNG'}
             </button>
 
             <button
               onClick={onClose}
-              className="p-2 text-slate-500 hover:text-white hover:bg-slate-800 rounded-xl transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+              className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-colors"
               aria-label="Close poster"
             >
-              <X className="w-4 h-4" aria-hidden="true" />
+              <X className="w-5 h-5" aria-hidden="true" />
             </button>
           </div>
         </div>

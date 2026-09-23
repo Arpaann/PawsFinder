@@ -1,16 +1,19 @@
 {
-  "name": "PawsFinder",
+  "name": "PawsFinder | Lost Pet Recovery & Rescue Network",
   "short_name": "PawsFinder",
-  "description": "Lost pet recovery and community rescue network.",
+  "description": "Lost pet recovery and community rescue network. Report missing pets and generate printable street posters instantly.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "any",
   "background_color": "#0f172a",
-  "theme_color": "#4F46E5",
+  "theme_color": "#4f46e5",
+  "categories": ["utilities", "pets", "social"],
   "icons": [
     {
       "src": "/favicon.svg",
       "type": "image/svg+xml",
-      "sizes": "any",
+      "sizes": "192x192 512x512 any",
       "purpose": "any maskable"
     }
   ]

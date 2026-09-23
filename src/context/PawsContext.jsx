@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { initialPets } from '../data/initialPets';
 import { DEFAULT_LOGO_URL, DEFAULT_QR_URL } from '../data/defaultAssets';
+import { supabase, isSupabaseConfigured, mapPetFromDb, mapPetToDb } from '../lib/supabaseClient';
 
 const PawsContext = createContext();
 
@@ -82,7 +83,63 @@ export const PawsProvider = ({ children }) => {
     }
   });
 
-  // Sync Pets to localStorage
+  // ─── SUPABASE REALTIME INITIALIZATION & SUBSCRIPTION ───────────────────────
+  useEffect(() => {
+    if (!isSupabaseConfigured || !supabase) return;
+
+    // Fetch initial pets from Supabase DB
+    const fetchSupabasePets = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('pets')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.warn("Supabase fetch error, using local state:", error.message);
+          return;
+        }
+
+        if (data && data.length > 0) {
+          const mapped = data.map(mapPetFromDb);
+          setPets(mapped);
+        }
+      } catch (err) {
+        console.warn("Supabase connection failed, using offline cache:", err);
+      }
+    };
+
+    fetchSupabasePets();
+
+    // Real-Time WebSocket Channel Listener
+    const channel = supabase
+      .channel('public:pets')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'pets' },
+        (payload) => {
+          if (payload.eventType === 'INSERT') {
+            const newPet = mapPetFromDb(payload.new);
+            setPets(prev => [newPet, ...prev.filter(p => p.id !== newPet.id)]);
+          } else if (payload.eventType === 'UPDATE') {
+            const updatedPet = mapPetFromDb(payload.new);
+            setPets(prev => prev.map(p => p.id === updatedPet.id ? updatedPet : p));
+          } else if (payload.eventType === 'DELETE') {
+            const deletedId = payload.old?.id;
+            if (deletedId) {
+              setPets(prev => prev.filter(p => p.id !== deletedId));
+            }
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  // Sync Pets to localStorage for offline cache
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEYS.PETS, JSON.stringify(pets));
@@ -128,20 +185,49 @@ export const PawsProvider = ({ children }) => {
       currency: newPetData.currency || currency.code,
       currencySymbol: newPetData.currencySymbol || currency.symbol
     };
+
+    // Optimistic UI update
     setPets(prev => [newPet, ...prev]);
+
+    // Push to Supabase if configured
+    if (isSupabaseConfigured && supabase) {
+      const dbPayload = mapPetToDb(newPet);
+      supabase.from('pets').insert([dbPayload]).catch(err => {
+        console.warn("Supabase insert async warning:", err);
+      });
+    }
+
     return newPet;
   };
 
   const updatePetStatus = (petId, newStatus) => {
     setPets(prev => prev.map(p => p.id === petId ? { ...p, status: newStatus } : p));
+
+    if (isSupabaseConfigured && supabase) {
+      supabase.from('pets').update({ status: newStatus }).eq('id', petId).catch(err => {
+        console.warn("Supabase update status warning:", err);
+      });
+    }
   };
 
   const approvePet = (petId, approvedState = true) => {
     setPets(prev => prev.map(p => p.id === petId ? { ...p, approved: approvedState } : p));
+
+    if (isSupabaseConfigured && supabase) {
+      supabase.from('pets').update({ approved: approvedState }).eq('id', petId).catch(err => {
+        console.warn("Supabase approve warning:", err);
+      });
+    }
   };
 
   const deletePet = (petId) => {
     setPets(prev => prev.filter(p => p.id !== petId));
+
+    if (isSupabaseConfigured && supabase) {
+      supabase.from('pets').delete().eq('id', petId).catch(err => {
+        console.warn("Supabase delete warning:", err);
+      });
+    }
   };
 
   const updateSiteConfig = (updatedFields) => {
@@ -173,10 +259,8 @@ export const PawsProvider = ({ children }) => {
   const resetToDefault = () => {
     setPets(initialPets);
     setSiteConfig(DEFAULT_CONFIG);
-    setCurrencyState(SUPPORTED_CURRENCIES[0]);
     localStorage.removeItem(STORAGE_KEYS.PETS);
     localStorage.removeItem(STORAGE_KEYS.CONFIG);
-    localStorage.removeItem(STORAGE_KEYS.CURRENCY);
   };
 
   return (
@@ -185,6 +269,7 @@ export const PawsProvider = ({ children }) => {
       siteConfig,
       currency,
       currencies: SUPPORTED_CURRENCIES,
+      isSupabaseConnected: isSupabaseConfigured,
       changeCurrency,
       isAdmin,
       addPet,

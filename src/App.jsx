@@ -5,6 +5,7 @@ import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { MobileNav } from './components/MobileNav';
 import { CookieConsentBanner } from './components/CookieConsentBanner';
+import { PwaInstallPrompt } from './components/PwaInstallPrompt';
 
 // ─── Lazy-loaded pages (code splitting — each page loads only when visited) ───
 const HomePage    = lazy(() => import('./pages/HomePage').then(m => ({ default: m.HomePage })));
@@ -259,8 +260,9 @@ function MainApp() {
         />
       </Suspense>
 
-      {/* 7. Cookie consent */}
+      {/* 7. Cookie consent & PWA Installation */}
       <CookieConsentBanner />
+      <PwaInstallPrompt />
     </div>
   );
 }

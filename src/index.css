@@ -78,6 +78,13 @@
     overflow-x: hidden;
     background-color: #0f172a;
     color: #f1f5f9;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Mobile App touch ergonomics */
+  button, a {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
 
   /* Display headings use Outfit */
@@ -141,6 +148,11 @@
     background-color: var(--color-reunited);
     color: #1c1917;
   }
+
+  /* Mobile safe area insets */
+  .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0.75rem); }
+  .pt-safe { padding-top: env(safe-area-inset-top, 0.5rem); }
+  .mb-safe { margin-bottom: env(safe-area-inset-bottom, 0.75rem); }
 
   /* Print — hide non-poster elements */
   @media print {
